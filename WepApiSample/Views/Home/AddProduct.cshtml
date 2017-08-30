@@ -1,0 +1,55 @@
+﻿<script type="text/javascript">   
+    function addSubmit() {
+
+        var id = $.trim($('input[name=id]').val());
+        var name = $.trim($('input[name=name]').val());
+        var category = $.trim($('input[name=category]').val());
+        var price = $.trim($('input[name=price]').val());
+
+        if (id == '' || name == '' || category == '' || price == '') {
+            console.log('input');
+            return false;
+        }
+
+        $.post('../api/products/add',{id:id, name:name, category:category, price:price})
+            .success(function (data) {
+                location.replace('index');
+            })
+            .error(function () {
+                $('#message').text("Error posting the update.");
+            });
+        return false;
+    }
+</script>
+
+<h1>Add Product</h1>
+<form id="addProduct" method="post">
+    <div>
+        <label>ID</label>
+    </div>
+    <div>
+        <input name="id" type="text" />
+    </div>
+    <div>
+        <label>Name</label>
+    </div>
+    <div>
+        <input name="name" type="text" />
+    </div>
+    <div>
+        <label>Category</label>
+    </div>
+    <div>
+        <input name="category" type="text" />
+    </div>
+    <div>
+        <label>Price</label>
+    </div>
+    <div>
+        <input name="price" type="text" />
+    </div>
+    <div>
+        <input type="button" value="Submit" id="submit" onclick="addSubmit();"/>
+    </div>
+</form>
+<div id="message"></div>
