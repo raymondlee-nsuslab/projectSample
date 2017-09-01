@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.Ajax.Utilities;
 using WepApiSample.Exceptions;
@@ -21,16 +22,17 @@ namespace WepApiSample.Controllers
        static readonly IProductRepository repository = new ProductRepository();
 
         [System.Web.Http.ActionName("GetAll")]
-        public IEnumerable<Product> GetAllProducts()
+        public IEnumerable<ProductModels> GetAllProducts()
         {
             return repository.GetAll();
         }
 
         [System.Web.Http.ActionName("GetId")]
-        public List<Product> GetProduct(int id)
+        public async Task<List<ProductEntity>> GetProduct(int id)
         {
-            Product product = repository.Get(id);
-            if (product == null)
+            List<ProductEntity> product = await repository.Get(id);
+
+            if (product.Count == 0)
             {
                 var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
@@ -39,13 +41,12 @@ namespace WepApiSample.Controllers
                 };
                 throw new HttpResponseException(resp);
             }
-            List<Product> item = new List<Product>();
-            item.Add(product);
-            return item;
+            
+            return product;
         }
 
         [System.Web.Http.ActionName("GetCategory")]
-        public IEnumerable<Product> GetProductsByCategory(String category)
+        public IEnumerable<ProductModels> GetProductsByCategory(String category)
         {           
             return repository.GetAll().Where(
                 p => string.Equals(p.Category, category, StringComparison.OrdinalIgnoreCase));
@@ -53,27 +54,27 @@ namespace WepApiSample.Controllers
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.ActionName("Add")]
-        public HttpResponseMessage PostProduct(Product item)
+        public HttpResponseMessage PostProduct(ProductModels item)
         {
             item = repository.Add(item);
-
             /*CreateResponse 메서드는 HttpResponseMessage 개체를 생성하고 
              * 자동으로 응답 메시지의 본문에 직렬화된 Product 개체의 표현식*/
-            var response = Request.CreateResponse<Product>(HttpStatusCode.Created, item);
-
-            string uri = Url.Link("DefaultApi", new { id = item.Id });
+            var response = Request.CreateResponse<ProductModels>(HttpStatusCode.Created, item);
+            string uri = Url.Link("DefaultApi", new { name = item.Name });
             response.Headers.Location = new Uri(uri);
             return response;
         }
 
         [System.Web.Http.HttpPost]
         [System.Web.Http.ActionName("Put")]
-        public void PutProduct(Product product)
+        public void PutProduct(ProductModels product)
         {
             
             if (!repository.Update(product))
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                String message = string.Format("Product Id : {0} Update fail", product.ProductModelsID);
+                throw new HttpResponseException(
+                    Request.CreateErrorResponse(HttpStatusCode.NotModified, message));
             }
         }
         
@@ -81,14 +82,7 @@ namespace WepApiSample.Controllers
         [System.Web.Http.ActionName("Delete")]
         public String DeleteProduct([FromBody]int id)
         {
-            Product item = repository.Get(id);
-            if (item == null)
-            {
-                //HttpError와 HttpResponseException을 동시에 사용
-                var message = string.Format("Product with id = {0} not found", id);
-                throw new HttpResponseException(
-                    Request.CreateErrorResponse(HttpStatusCode.NotFound,message));                
-            }
+            String result = repository.Remove(id);
 
             return "success";
         }

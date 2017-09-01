@@ -16,6 +16,7 @@ namespace WepApiSample.Controllers
    
     public class CookiesController : ApiController
     {
+       /* 
         [System.Web.Http.ActionName("Cookie")]
         public HttpResponseMessage Get()
         {
@@ -27,7 +28,7 @@ namespace WepApiSample.Controllers
             {
                 Content = new StringContent("your session ID = " + sessionId)
             };
-        }
+        }*/
         
 
     }
