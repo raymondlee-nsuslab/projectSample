@@ -11,7 +11,7 @@ namespace WepApiSample.Cookie
 {
     public class SessionIdHandler : DelegatingHandler
     {
-        static public string SessionIdToken = "session-id";
+        /*static public string SessionIdToken = "session-id";
 
         protected override async Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request, CancellationToken cancellationToken)
@@ -50,6 +50,6 @@ namespace WepApiSample.Cookie
             });
 
             return response;
-        }
+        }*/
     }
 }

@@ -110,7 +110,7 @@ namespace StudentData
 
         public bool SetStudent(Student requestStudent)
         {
-            if (string.IsNullOrEmpty(requestStudent.Title) == true)
+            if (string.IsNullOrEmpty(requestStudent.Title) == true || requestStudent.StudentModelsID<=0)
             {
                 return false;
             }
@@ -122,55 +122,74 @@ namespace StudentData
                     return false;
                 }
 
-                if (!(requestStudent.StudentModelsID <= 0))
+                var student = schoolContext.StudentModels
+                    .FirstOrDefault(s => s.StudentModelsID == requestStudent.StudentModelsID);
+
+                if (student == null)
                 {
-                    //edit
-                    var student = schoolContext.StudentModels
-                        .FirstOrDefault(s => s.StudentModelsID == requestStudent.StudentModelsID);
-
-                    if (student == null)
+                    var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
-                        var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
-                        {
-                            Content = new StringContent(string.Format("Student ID Not Found")),
-                            ReasonPhrase = "Student ID Not Found"
-                        };
-                        throw new HttpResponseException(resp);
-                    }
-
-                    student.FirstMidName = requestStudent.FirstMidName;
-                    student.LastName = requestStudent.LastName;
-                    var enroll =
-                        schoolContext.EnrollmentModelses.FirstOrDefault(
-                            e => e.EnrollmentModelsID == requestStudent.EnrollmentModelsID);
-                    if (enroll == null)
-                    {
-                        return false;
-                    }
-                    enroll.CourseModelsID = courseId.CourseModelsID;
+                        Content = new StringContent(string.Format("Student ID Not Found")),
+                        ReasonPhrase = "Student ID Not Found"
+                    };
+                    throw new HttpResponseException(resp);
                 }
-                else
+
+                student.FirstMidName = requestStudent.FirstMidName;
+                student.LastName = requestStudent.LastName;
+                var enroll =
+                    schoolContext.EnrollmentModelses.FirstOrDefault(
+                        e => e.EnrollmentModelsID == requestStudent.EnrollmentModelsID);
+                if (enroll == null)
                 {
-                    //save
-                    var maxid = schoolContext.StudentModels.Max(s => s.StudentModelsID);
-                    var addId = maxid + 1;
-
-                    var studentModels = new StudentModels();
-                    studentModels.StudentModelsID = addId;
-                    studentModels.FirstMidName = requestStudent.FirstMidName;
-                    studentModels.LastName = requestStudent.LastName;
-                    studentModels.EnrollmentDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                    schoolContext.StudentModels.Add(studentModels);
-
-                    var enroll = new EnrollmentModels();
-                    enroll.StudentModelsID = addId;
-                    enroll.CourseModelsID = courseId.CourseModelsID;
-                    schoolContext.EnrollmentModelses.Add(enroll);
+                    return false;
                 }
+                enroll.CourseModelsID = courseId.CourseModelsID;
+                
                 schoolContext.SaveChanges();
                 return true;
             }
 
+        }
+
+        public bool AddStudent(Student requestStudent)
+        {
+            if (string.IsNullOrEmpty(requestStudent.Title) == true || string.IsNullOrEmpty(requestStudent.FirstMidName) || string.IsNullOrEmpty(requestStudent.LastName))
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(string.Format("Please fill in all fields")),
+                    ReasonPhrase = "Please fill in all fields"
+                };
+                throw new HttpResponseException(resp);
+            }
+
+            using (SchoolContext schoolContext = new SchoolContext())
+            {
+                var courseId = schoolContext.CourseModelses.FirstOrDefault(c => c.Title.Contains(requestStudent.Title));
+                if (courseId == null)
+                {
+                    return false;
+                }
+                //save
+                var maxid = schoolContext.StudentModels.Max(s => s.StudentModelsID);
+                var addId = maxid + 1;
+
+                var studentModels = new StudentModels();
+                studentModels.StudentModelsID = addId;
+                studentModels.FirstMidName = requestStudent.FirstMidName;
+                studentModels.LastName = requestStudent.LastName;
+                studentModels.EnrollmentDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                schoolContext.StudentModels.Add(studentModels);
+
+                var enroll = new EnrollmentModels();
+                enroll.StudentModelsID = addId;
+                enroll.CourseModelsID = courseId.CourseModelsID;
+                schoolContext.EnrollmentModelses.Add(enroll);
+                schoolContext.SaveChanges();
+                return true;
+            }
+            
         }
 
         public bool DeleteStudent(Student student)

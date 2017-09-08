@@ -4,7 +4,7 @@
         $.getJSON("../api/products/getall",
             function (data) {
                 $.each(data,
-                    function(key, val) {
+                    function (key, val) {
                         var inner = '<tr>';
                         inner += '<td class="col-md-2 control-label">' + val.ProductModelsID + '</td>';
                         inner += '<td>' + val.Name + '</td>';
@@ -43,7 +43,7 @@
         } else {
             param = '../api/products/getcategory?category=' + selectVlaue;
         }
-        
+
         $.getJSON(param,
                 function (data) {
                     $('ul *').remove();
@@ -74,7 +74,7 @@
             url: '../api/products/delete',
             data: { "": $('#selectVlaue').val() },
             contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-            success: function(data) {
+            success: function (data) {
                 $('#result').text(data);
                 location.reload();
             },
@@ -84,7 +84,7 @@
         });
     });
 
-    $('#value').change(function() {
+    $('#value').change(function () {
         $('#selectVlaue').val('');
         $('#selectVlaue').focus();
     });
