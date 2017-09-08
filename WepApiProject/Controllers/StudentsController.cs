@@ -36,6 +36,14 @@ namespace WepApiProject.Controllers
             return Json(studentManage.GetStudent(enrollId),JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult AddStudent(Student student)
+        {
+            var studentManage = new StudentManage();
+
+            return Json(studentManage.AddStudent(student), JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPut]
         public ActionResult UpdateStudent(Student student)
         {

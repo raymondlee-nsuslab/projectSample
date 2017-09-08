@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Newtonsoft.Json.Linq;
-using sample.DAL;
-using sample.Models;
-using System.Linq.Dynamic;
-using System.Web.Script.Serialization;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Web.Http;
 using StudentData;
 
 namespace sample.Controllers
@@ -21,14 +17,30 @@ namespace sample.Controllers
             return View();
         }
 
-        [HttpGet]
+        [System.Web.Mvc.HttpGet]
         public ActionResult GetTitles()
         {
-            var studentManage = new StudentManage();
-            return Json(new {Data = studentManage.GetTitleList()}, JsonRequestBehavior.AllowGet);
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:9090/");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage resp = client.GetAsync("Studnet/gettitles").Result;
+            if (!resp.IsSuccessStatusCode)
+            {
+                var respErr = new HttpResponseMessage(HttpStatusCode.NotFound)
+                {
+                    Content = new StringContent(string.Format("Student Titles is not found")),
+                    ReasonPhrase = "Student Titles is not found"
+                };
+                throw new HttpResponseException(respErr);
+            }
+            return Json(new { resp.Content.ReadAsStringAsync().Result },
+                JsonRequestBehavior.AllowGet);
+            /*var studentManage = new StudentManage();
+            return Json(new {Data = studentManage.GetTitleList()}, JsonRequestBehavior.AllowGet);*/
         }
 
-        [HttpPost]
+        [System.Web.Mvc.HttpPost]
         public ActionResult LoadSchoolList(SchoolListRequest request)
         {
             
@@ -47,7 +59,7 @@ namespace sample.Controllers
 
         }
 
-        [HttpGet]
+        [System.Web.Mvc.HttpGet]
         public ActionResult Save(int enrollId)
         {
             var studentManage = new StudentManage();
@@ -55,8 +67,8 @@ namespace sample.Controllers
             return View(student);
         }
 
-        [HttpPost]
-        public ActionResult Save(StudentData.Student student)
+        [System.Web.Mvc.HttpPost]
+        public ActionResult Save(Student student)
         {
             var status = false;
             if (ModelState.IsValid)
@@ -68,15 +80,15 @@ namespace sample.Controllers
         }
 
 
-        [HttpGet]
+        [System.Web.Mvc.HttpGet]
         public ActionResult Delete(int enrollId)
         {
             var studentManage = new StudentManage();
             return View(studentManage.GetStudent(enrollId));
         }
 
-        [HttpPost]
-        public ActionResult Delete(StudentData.Student student)
+        [System.Web.Mvc.HttpPost]
+        public ActionResult Delete(Student student)
         {
             var status = false;
             var studentManage = new StudentManage();

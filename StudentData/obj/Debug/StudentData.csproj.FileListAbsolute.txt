@@ -9,3 +9,9 @@ C:\Users\raymond.lee\Documents\sample\StudentData\bin\Debug\EntityFramework.SqlS
 C:\Users\raymond.lee\Documents\sample\StudentData\obj\Debug\StudentData.csprojResolveAssemblyReference.cache
 C:\Users\raymond.lee\Documents\sample\StudentData\obj\Debug\StudentData.dll
 C:\Users\raymond.lee\Documents\sample\StudentData\obj\Debug\StudentData.pdb
+C:\Users\raymond.lee\Documents\sample\StudentData\bin\Debug\Newtonsoft.Json.dll
+C:\Users\raymond.lee\Documents\sample\StudentData\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\raymond.lee\Documents\sample\StudentData\bin\Debug\System.Web.Http.dll
+C:\Users\raymond.lee\Documents\sample\StudentData\bin\Debug\Newtonsoft.Json.xml
+C:\Users\raymond.lee\Documents\sample\StudentData\bin\Debug\System.Net.Http.Formatting.xml
+C:\Users\raymond.lee\Documents\sample\StudentData\bin\Debug\System.Web.Http.xml

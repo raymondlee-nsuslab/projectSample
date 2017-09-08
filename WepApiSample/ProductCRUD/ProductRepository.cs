@@ -22,8 +22,7 @@ namespace WepApiSample.Models
         }
 
         public async Task<List<ProductEntity>> Get(int id)
-        {
-            
+        {           
             var findProduct = await context.product.Where(p=> p.ProductModelsID == id).Select(p =>
                 new ProductEntity()
                 {

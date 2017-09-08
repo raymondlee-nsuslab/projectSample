@@ -1,4 +1,5 @@
-﻿using System;
+﻿//////// ProductsController.cs
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,8 +19,8 @@ namespace WepApiSample.Controllers
     // contorller 전역에 사용자 예외필터 적용[NotImplExceptionFilter]
     public class ProductsController : ApiController
     {
-        
-       static readonly IProductRepository repository = new ProductRepository();
+
+        static readonly IProductRepository repository = new ProductRepository();
 
         [System.Web.Http.ActionName("GetAll")]
         public IEnumerable<ProductModels> GetAllProducts()
@@ -41,13 +42,13 @@ namespace WepApiSample.Controllers
                 };
                 throw new HttpResponseException(resp);
             }
-            
+
             return product;
         }
 
         [System.Web.Http.ActionName("GetCategory")]
         public IEnumerable<ProductModels> GetProductsByCategory(String category)
-        {           
+        {
             return repository.GetAll().Where(
                 p => string.Equals(p.Category, category, StringComparison.OrdinalIgnoreCase));
         }
@@ -69,7 +70,7 @@ namespace WepApiSample.Controllers
         [System.Web.Http.ActionName("Put")]
         public void PutProduct(ProductModels product)
         {
-            
+
             if (!repository.Update(product))
             {
                 String message = string.Format("Product Id : {0} Update fail", product.ProductModelsID);
@@ -77,7 +78,7 @@ namespace WepApiSample.Controllers
                     Request.CreateErrorResponse(HttpStatusCode.NotModified, message));
             }
         }
-        
+
         [System.Web.Http.HttpPost]
         [System.Web.Http.ActionName("Delete")]
         public String DeleteProduct([FromBody]int id)

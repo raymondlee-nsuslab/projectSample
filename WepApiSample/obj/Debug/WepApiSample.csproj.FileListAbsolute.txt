@@ -88,3 +88,8 @@ C:\Users\raymond.lee\Documents\sample\WepApiSample\bin\System.Web.Http.Owin.xml
 C:\Users\raymond.lee\Documents\sample\WepApiSample\obj\Debug\WepApiSample.csprojResolveAssemblyReference.cache
 C:\Users\raymond.lee\Documents\sample\WepApiSample\obj\Debug\WepApiSample.dll
 C:\Users\raymond.lee\Documents\sample\WepApiSample\obj\Debug\WepApiSample.pdb
+C:\Users\raymond.lee\Documents\sample\WepApiSample\bin\Microsoft.Owin.Host.HttpListener.dll
+C:\Users\raymond.lee\Documents\sample\WepApiSample\bin\Microsoft.Owin.Hosting.dll
+C:\Users\raymond.lee\Documents\sample\WepApiSample\bin\Microsoft.Owin.Host.HttpListener.xml
+C:\Users\raymond.lee\Documents\sample\WepApiSample\bin\Microsoft.Owin.Hosting.xml
+C:\Users\raymond.lee\Documents\sample\WepApiSample\bin\System.Linq.Dynamic.dll
