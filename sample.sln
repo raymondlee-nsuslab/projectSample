@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Main", "Sample.Main\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentData", "StudentData\StudentData.csproj", "{B983FAC9-5470-40B1-9E87-ECB0A54DEDAA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WepApiStudent", "WepApiProject\WepApiProject.csproj", "{98D14E37-62A1-4450-8D99-63641DB007AA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiStudents", "WebApiStudents\WebApiStudents.csproj", "{22F3F938-B26D-44A1-8287-A96A0012508B}"
 EndProject
 Global
@@ -39,10 +37,6 @@ Global
 		{B983FAC9-5470-40B1-9E87-ECB0A54DEDAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B983FAC9-5470-40B1-9E87-ECB0A54DEDAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B983FAC9-5470-40B1-9E87-ECB0A54DEDAA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{98D14E37-62A1-4450-8D99-63641DB007AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98D14E37-62A1-4450-8D99-63641DB007AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98D14E37-62A1-4450-8D99-63641DB007AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98D14E37-62A1-4450-8D99-63641DB007AA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22F3F938-B26D-44A1-8287-A96A0012508B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{22F3F938-B26D-44A1-8287-A96A0012508B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22F3F938-B26D-44A1-8287-A96A0012508B}.Release|Any CPU.ActiveCfg = Release|Any CPU
