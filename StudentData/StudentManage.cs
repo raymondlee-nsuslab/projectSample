@@ -50,12 +50,12 @@ namespace StudentData
 
                 if (string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir))
                 {
-                    var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    var response = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
                         Content = new StringContent(string.Format("SortColumn is Null")),
                         ReasonPhrase = "SortColumn is Null"
                     };
-                    throw new HttpResponseException(resp);
+                    throw new HttpResponseException(response);
                 }
                 var studentListReturn = new StudentListReturn();
                 studentListReturn.TotalRecord = schoolList.Count();
@@ -64,11 +64,11 @@ namespace StudentData
                 var skip = start;
 
                 var infoList = schoolList.Select(
-                    list => new SchoolList()
+                    list => new Students()
                     {
-                        EnrollmentModelsID = list.enroll.enroll.EnrollmentModelsID,
-                        StudentModelsID = list.student.StudentModelsID,
-                        CourseModelsID = list.enroll.coruse.CourseModelsID,
+                        EnrollmentId = list.enroll.enroll.EnrollmentModelsID,
+                        StudentId = list.student.StudentModelsID,
+                        CourseId = list.enroll.coruse.CourseModelsID,
                         Grade = list.enroll.enroll.Grade,
                         Title = list.enroll.coruse.Title,
                         Credits = list.enroll.coruse.Credits,
@@ -82,7 +82,7 @@ namespace StudentData
             }
         }
 
-        public Student GetStudent(int enrollId)
+        public Students GetStudent(int enrollId)
         {
             using (SchoolContext schoolContext = new SchoolContext())
             {
@@ -92,11 +92,11 @@ namespace StudentData
                         e => e.enroll.CourseModelsID,
                         c => c.CourseModelsID, (e, c) => new { enroll = e, course = c })
                     .Where(e => e.enroll.enroll.EnrollmentModelsID == enrollId).Select(
-                        student => new Student()
+                        student => new Students()
                         {
-                            StudentModelsID = student.enroll.enroll.StudentModelsID,
-                            CourseModelsID = student.course.CourseModelsID,
-                            EnrollmentModelsID = student.enroll.enroll.EnrollmentModelsID,
+                            StudentId = student.enroll.enroll.StudentModelsID,
+                            CourseId = student.course.CourseModelsID,
+                            EnrollmentId = student.enroll.enroll.EnrollmentModelsID,
                             LastName = student.enroll.student.LastName,
                             FirstMidName = student.enroll.student.FirstMidName,
                             Title = student.course.Title
@@ -107,16 +107,16 @@ namespace StudentData
         }
 
 
-        public bool SetStudent(Student requestStudent)
+        public bool SetStudent(Students requestStudent)
         {
             if (string.IsNullOrEmpty(requestStudent.Title) == true || string.IsNullOrEmpty(requestStudent.FirstMidName) || string.IsNullOrEmpty(requestStudent.LastName))
             {
-                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                var response = new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
                     Content = new StringContent(string.Format("Please fill in all fields")),
                     ReasonPhrase = "Please fill in all fields"
                 };
-                throw new HttpResponseException(resp);
+                throw new HttpResponseException(response);
             }
             using (SchoolContext schoolContext = new SchoolContext())
             {
@@ -126,27 +126,27 @@ namespace StudentData
                     return false;
                 }
 
-                if (!(requestStudent.StudentModelsID <= 0))
+                if (!(requestStudent.StudentId <= 0))
                 {
                     //edit
                     var student = schoolContext.StudentModels
-                        .FirstOrDefault(s => s.StudentModelsID == requestStudent.StudentModelsID);
+                        .FirstOrDefault(s => s.StudentModelsID == requestStudent.StudentId);
 
                     if (student == null)
                     {
-                        var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                        var response = new HttpResponseMessage(HttpStatusCode.NotFound)
                         {
                             Content = new StringContent(string.Format("Student ID Not Found")),
                             ReasonPhrase = "Student ID Not Found"
                         };
-                        throw new HttpResponseException(resp);
+                        throw new HttpResponseException(response);
                     }
 
                     student.FirstMidName = requestStudent.FirstMidName;
                     student.LastName = requestStudent.LastName;
                     var enroll =
                         schoolContext.EnrollmentModelses.FirstOrDefault(
-                            e => e.EnrollmentModelsID == requestStudent.EnrollmentModelsID);
+                            e => e.EnrollmentModelsID == requestStudent.EnrollmentId);
                     if (enroll == null)
                     {
                         return false;

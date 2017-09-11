@@ -9,7 +9,7 @@ namespace StudentData
 {
 
     [MetadataType(typeof(SchoolMetadata))]
-    public partial class Student
+    public partial class Students
     {
 
     }

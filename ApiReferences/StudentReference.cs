@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace ApiReferences
 {
-    public class StudentReference
+    public class StudentData
     {
         public List<string> GetTitles()
         {
@@ -16,39 +16,39 @@ namespace ApiReferences
                 client.BaseAddress = new Uri("http://localhost/");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var resp = client.GetAsync("students/gettitles").Result;
-                if (!resp.IsSuccessStatusCode)
+                var response = client.GetAsync("students/gettitles").Result;
+                if (!response.IsSuccessStatusCode)
                 {
-                    var respErr = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    var responseError = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
-                        Content = new StringContent(string.Format(Convert.ToString(resp.StatusCode))),
+                        Content = new StringContent(string.Format(Convert.ToString(response.StatusCode))),
                         ReasonPhrase = "Student Titles is not found"
                     };
-                    throw new HttpResponseException(respErr);
+                    throw new HttpResponseException(responseError);
                 }
-                var titles = resp.Content.ReadAsAsync<List<string>>().Result;
+                var titles = response.Content.ReadAsAsync<List<string>>().Result;
                 return titles;
             }    
         }
 
-        public GetRequestStudents GetStudents(Students students)
+        public GetStudentsRequest GetStudents(Students students)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("http://localhost/");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                var resp = client.PostAsJsonAsync("students/getschools",students).Result;
-                if (!resp.IsSuccessStatusCode)
+                var response = client.PostAsJsonAsync("students/getschools",students).Result;
+                if (!response.IsSuccessStatusCode)
                 {
-                    var respErr = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    var responseError = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
-                        Content = new StringContent(string.Format(Convert.ToString(resp.StatusCode))),
+                        Content = new StringContent(string.Format(Convert.ToString(response.StatusCode))),
                         ReasonPhrase = "Student Infomation is not found"
                     };
-                    throw new HttpResponseException(respErr);
+                    throw new HttpResponseException(responseError);
                 }
-                var getStudents = resp.Content.ReadAsAsync<GetRequestStudents>().Result;
+                var getStudents = response.Content.ReadAsAsync<GetStudentsRequest>().Result;
                 return getStudents;
             }
         }
@@ -59,17 +59,17 @@ namespace ApiReferences
             {
                 client.BaseAddress = new Uri("http://localhost/");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var resp = client.GetAsync("students/getstudent?enrollId=" + enrollId).Result;
-                if (!resp.IsSuccessStatusCode)
+                var response = client.GetAsync("students/getstudent?enrollId=" + enrollId).Result;
+                if (!response.IsSuccessStatusCode)
                 {
-                    var respErr = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    var responseError = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
-                        Content = new StringContent(string.Format(Convert.ToString(resp.StatusCode))),
+                        Content = new StringContent(string.Format(Convert.ToString(response.StatusCode))),
                         ReasonPhrase = "Student ID Not Found"
                     };
-                    throw new HttpResponseException(respErr);
+                    throw new HttpResponseException(responseError);
                 }
-                var getStudent = resp.Content.ReadAsAsync<Student>().Result;
+                var getStudent = response.Content.ReadAsAsync<Student>().Result;
                 return getStudent;
             }
         }
@@ -80,17 +80,17 @@ namespace ApiReferences
             {
                 client.BaseAddress = new Uri("http://localhost/");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var resp = client.PutAsJsonAsync("students/updatestudent", student).Result;
-                if (!resp.IsSuccessStatusCode)
+                var response = client.PutAsJsonAsync("students/updatestudent", student).Result;
+                if (!response.IsSuccessStatusCode)
                 {
-                    var respErr = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    var responseError = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
-                        Content = new StringContent(string.Format(Convert.ToString(resp.StatusCode))),
+                        Content = new StringContent(string.Format(Convert.ToString(response.StatusCode))),
                         ReasonPhrase = "Student ID Not Found"
                     };
-                    throw new HttpResponseException(respErr);
+                    throw new HttpResponseException(responseError);
                 }
-                var status = resp.Content.ReadAsAsync<bool>().Result;
+                var status = response.Content.ReadAsAsync<bool>().Result;
                 return status;
             }
         }
@@ -101,17 +101,17 @@ namespace ApiReferences
             {
                 client.BaseAddress = new Uri("http://localhost/");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var resp = client.DeleteAsync("students/deletestudent?enrollmentModelsId=" + student.EnrollmentModelsID).Result;
-                if (!resp.IsSuccessStatusCode)
+                var response = client.DeleteAsync("students/deletestudent?enrollmentId=" + student.EnrollmentId).Result;
+                if (!response.IsSuccessStatusCode)
                 {
-                    var respErr = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    var responseError = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
-                        Content = new StringContent(string.Format(Convert.ToString(resp.StatusCode))),
+                        Content = new StringContent(string.Format(Convert.ToString(response.StatusCode))),
                         ReasonPhrase = "Student ID Not Found"
                     };
-                    throw new HttpResponseException(respErr);
+                    throw new HttpResponseException(responseError);
                 }
-                var status = resp.Content.ReadAsAsync<bool>().Result;
+                var status = response.Content.ReadAsAsync<bool>().Result;
                 return status;
             }
         }

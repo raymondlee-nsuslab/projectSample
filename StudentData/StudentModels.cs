@@ -33,11 +33,11 @@ namespace StudentData
         public virtual StudentModels Student { get; set; }
     }
 
-    public class SchoolList
+    public partial class Students
     {
-        public int StudentModelsID { get; set; }
-        public int CourseModelsID { get; set; }
-        public int EnrollmentModelsID { get; set; }
+        public int StudentId { get; set; }
+        public int CourseId { get; set; }
+        public int EnrollmentId { get; set; }
         public string LastName { get; set; }
         public string FirstMidName { get; set; }
         public DateTime EnrollmentDate { get; set; }
@@ -45,15 +45,4 @@ namespace StudentData
         public int Credits { get; set; }
         public decimal? Grade { get; set; }
     }
-
-    public partial class Student
-    {
-        public int StudentModelsID { get; set; }
-        public int CourseModelsID { get; set; }
-        public int EnrollmentModelsID { get; set; }
-        public string LastName { get; set; }
-        public string FirstMidName { get; set; }
-        public string Title { get; set; }
-    }
-
 }

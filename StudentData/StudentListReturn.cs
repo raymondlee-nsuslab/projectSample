@@ -9,6 +9,6 @@ namespace StudentData
     public class StudentListReturn
     {
         public int TotalRecord { get; set; }
-        public List<SchoolList> SchoolLists { get; set; }
+        public List<Students> SchoolLists { get; set; }
     }
 }

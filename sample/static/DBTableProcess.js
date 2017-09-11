@@ -10,9 +10,9 @@
             "datatype": "json"
         },
         "columns": [
-            { "data": "EnrollmentModelsID", "name": "EnrollmentModelsID", "autoWidth": true },
-            { "data": "StudentModelsID", "name": "StudentModelsID", "autoWidth": true },
-            { "data": "CourseModelsID", "name": "CourseModelsID", "autoWidth": true },
+            { "data": "EnrollmentId", "name": "EnrollmentId", "autoWidth": true },
+            { "data": "StudentId", "name": "StudentId", "autoWidth": true },
+            { "data": "CourseId", "name": "CourseId", "autoWidth": true },
             { "data": "LastName", "name": "LastName", "autoWidth": true },
             { "data": "FirstMidName", "name": "FirstMidName", "autoWidth": true },
             {
@@ -28,7 +28,7 @@
             { "data": "Credits", "name": "Credits", "autoWidth": true },
             { "data": "Grade", "name": "Grade", "autoWidth": true },
             {
-                "data": "EnrollmentModelsID",
+                "data": "EnrollmentId",
                 "bSortable": false,
                 "width": "50px",
                 "render": function (data) {
@@ -36,7 +36,7 @@
                 }
             },
             {
-                "data": "EnrollmentModelsID",
+                "data": "EnrollmentId",
                 "width": "50px",
                 "bSortable": false,
                 "render": function (data) {

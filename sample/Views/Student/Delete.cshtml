@@ -3,7 +3,7 @@
 <h2>Delete</h2>
 @using (Html.BeginForm("delete", "Student", FormMethod.Post, new { id = "popupForm" }))
 {
-    @Html.HiddenFor(s => s.EnrollmentModelsID)
+    @Html.HiddenFor(s => s.EnrollmentId)
     <div class="form-group">
         <label>FirstMid Name</label>
         <p>@Model.FirstMidName</p>

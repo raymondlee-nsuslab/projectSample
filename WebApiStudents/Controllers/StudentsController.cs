@@ -35,7 +35,7 @@ namespace WebApiStudents.Controllers
         }
 
         [HttpPut]
-        public ActionResult UpdateStudent(Student student)
+        public ActionResult UpdateStudent(Students student)
         {
             var status = false;
             if (ModelState.IsValid)
@@ -47,11 +47,11 @@ namespace WebApiStudents.Controllers
         }
 
         [HttpDelete]
-        public ActionResult DeleteStudent(int enrollmentModelsId)
+        public ActionResult DeleteStudent(int enrollmentId)
         {
             var status = false;
             var studentManage = new StudentManage();
-            status = studentManage.DeleteStudent(enrollmentModelsId);
+            status = studentManage.DeleteStudent(enrollmentId);
             return Json(status, JsonRequestBehavior.AllowGet);
         }
     }

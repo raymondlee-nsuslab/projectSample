@@ -15,16 +15,16 @@ namespace sample.Controllers
         [HttpGet]
         public ActionResult GetTitles()
         {
-            var studentReference = new StudentReference();
-            return Json(new { Data = studentReference.GetTitles() },
+            var studentData = new StudentData();
+            return Json(new { Data = studentData.GetTitles() },
                 JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public ActionResult GetStudents(Students request)
         {
-            var studentReference = new StudentReference();
-            var students = studentReference.GetStudents(request);
+            var studentData = new StudentData();
+            var students = studentData.GetStudents(request);
 
             return Json(new
             {
@@ -39,8 +39,8 @@ namespace sample.Controllers
         [HttpGet]
         public ActionResult Save(int enrollId)
         {
-            var studentReference = new StudentReference();
-            return View(studentReference.GetStudent(enrollId));
+            var studentData = new StudentData();
+            return View(studentData.GetStudent(enrollId));
         }
 
         [HttpPost]
@@ -49,8 +49,8 @@ namespace sample.Controllers
             var status = false;
             if (ModelState.IsValid)
             {
-                var studentReference = new StudentReference();
-                status = studentReference.SetStudent(student);
+                var studentData = new StudentData();
+                status = studentData.SetStudent(student);
             }
             return Json(status);
         }
@@ -59,16 +59,16 @@ namespace sample.Controllers
         [HttpGet]
         public ActionResult Delete(int enrollId)
         {
-            var studentReference = new StudentReference();
-            return View(studentReference.GetStudent(enrollId));
+            var studentData = new StudentData();
+            return View(studentData.GetStudent(enrollId));
         }
 
         [HttpPost]
         public ActionResult Delete(Student student)
         {
             var status = false;
-            var studentReference = new StudentReference();
-            status = studentReference.DeleteStudent(student);
+            var studentData = new StudentData();
+            status = studentData.DeleteStudent(student);
             return Json(status);
         }
     }
