@@ -5,7 +5,7 @@
         "dom": '<"top"i>rt<"botton"lp><"clear">',
         "orderMulti": false,
         "ajax": {
-            "url": "/Student/LoadSchoolList",
+            "url": "/Student/GetStudents",
             "type": "POST",
             "datatype": "json"
         },
@@ -105,8 +105,8 @@
                             schoolTable.ajax.reload();
                         }
                     },
-                    error : function(jqxhr) {
-                        $('#error').innerHTML(jqxhr.responseText);
+                    error: function (jqxhr) {
+                        $('#error').html(jqxhr.responseText);
                     }
                 });
 

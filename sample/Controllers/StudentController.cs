@@ -1,10 +1,5 @@
-﻿using System;
-using System.Web.Mvc;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Web.Http;
-using StudentData;
+﻿using System.Web.Mvc;
+using ApiReferences;
 
 namespace sample.Controllers
 {
@@ -17,87 +12,68 @@ namespace sample.Controllers
             return View();
         }
 
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         public ActionResult GetTitles()
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:9090/");
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            HttpResponseMessage resp = client.GetAsync("Studnet/gettitles").Result;
-            if (!resp.IsSuccessStatusCode)
-            {
-                var respErr = new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    Content = new StringContent(string.Format("Student Titles is not found")),
-                    ReasonPhrase = "Student Titles is not found"
-                };
-                throw new HttpResponseException(respErr);
-            }
-            return Json(new { resp.Content.ReadAsStringAsync().Result },
+            var studentReference = new StudentReference();
+            return Json(new { Data = studentReference.GetTitles() },
                 JsonRequestBehavior.AllowGet);
-            /*var studentManage = new StudentManage();
-            return Json(new {Data = studentManage.GetTitleList()}, JsonRequestBehavior.AllowGet);*/
         }
 
-        [System.Web.Mvc.HttpPost]
-        public ActionResult LoadSchoolList(SchoolListRequest request)
+        [HttpPost]
+        public ActionResult GetStudents(Students request)
         {
-            
-
-            var studentManage = new StudentManage();
-            var schoolList = studentManage.GetSchoolList(request);
+            var studentReference = new StudentReference();
+            var students = studentReference.GetStudents(request);
 
             return Json(new
             {
                 draw = request.Draw,
-                recordsFiltered = schoolList.TotalRecord,
-                recordTotal = schoolList.TotalRecord,
-                data = schoolList.SchoolLists
+                recordsFiltered = students.RecordTotal,
+                recordTotal = students.RecordTotal,
+                data = students.StudentsModelses
             }, JsonRequestBehavior.AllowGet
             );
-
         }
 
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         public ActionResult Save(int enrollId)
         {
-            var studentManage = new StudentManage();
-            var student = studentManage.GetStudent(enrollId);
-            return View(student);
+            var studentReference = new StudentReference();
+            return View(studentReference.GetStudent(enrollId));
         }
 
-        [System.Web.Mvc.HttpPost]
+        [HttpPost]
         public ActionResult Save(Student student)
         {
             var status = false;
             if (ModelState.IsValid)
             {
-                var studentManage = new StudentManage();
-                status = studentManage.SetStudent(student);
+                var studentReference = new StudentReference();
+                status = studentReference.SetStudent(student);
             }
             return Json(status);
         }
 
 
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         public ActionResult Delete(int enrollId)
         {
-            var studentManage = new StudentManage();
-            return View(studentManage.GetStudent(enrollId));
+            var studentReference = new StudentReference();
+            return View(studentReference.GetStudent(enrollId));
         }
 
-        [System.Web.Mvc.HttpPost]
+        [HttpPost]
         public ActionResult Delete(Student student)
         {
             var status = false;
-            var studentManage = new StudentManage();
-            status = studentManage.DeleteStudent(student);
+            var studentReference = new StudentReference();
+            status = studentReference.DeleteStudent(student);
             return Json(status);
         }
     }
 
-   
+
 
 
 

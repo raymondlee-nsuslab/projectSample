@@ -7,8 +7,6 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Data.Entity;
 using sample.Models;
-using sample.DAL;
-using StudentData;
 
 namespace sample
 {
@@ -20,7 +18,6 @@ namespace sample
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            Database.SetInitializer<SchoolContext>(new SchoolInitializer());
         }
     }
 }

@@ -13,7 +13,7 @@ namespace WebApiStudents.Controllers
             return Json(titles, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult GetSchools(SchoolListRequest request)
         {
             var studentManage = new StudentManage();
@@ -23,7 +23,7 @@ namespace WebApiStudents.Controllers
                 draw = request.Draw,
                 recordsFiltered = schools.TotalRecord,
                 recordTotal = schools.TotalRecord,
-                data = schools.SchoolLists
+                StudentsModelses = schools.SchoolLists
             }, JsonRequestBehavior.AllowGet);
         }
 
@@ -31,16 +31,7 @@ namespace WebApiStudents.Controllers
         public ActionResult GetStudent(int enrollId)
         {
             var studentManage = new StudentManage();
-
             return Json(studentManage.GetStudent(enrollId), JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult AddStudent(Student student)
-        {
-            var studentManage = new StudentManage();
-
-            return Json(studentManage.AddStudent(student), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPut]
@@ -56,12 +47,12 @@ namespace WebApiStudents.Controllers
         }
 
         [HttpDelete]
-        public ActionResult DeleteStudent(Student student)
+        public ActionResult DeleteStudent(int enrollmentModelsId)
         {
             var status = false;
             var studentManage = new StudentManage();
-            status = studentManage.DeleteStudent(student);
-            return Json(status);
+            status = studentManage.DeleteStudent(enrollmentModelsId);
+            return Json(status, JsonRequestBehavior.AllowGet);
         }
     }
 

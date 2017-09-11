@@ -54,7 +54,6 @@ namespace StudentData
         public string LastName { get; set; }
         public string FirstMidName { get; set; }
         public string Title { get; set; }
-
     }
 
 }
