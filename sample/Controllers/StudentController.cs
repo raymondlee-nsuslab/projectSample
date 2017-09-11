@@ -21,7 +21,7 @@ namespace sample.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetStudents(Students request)
+        public ActionResult GetStudents(StudentDataRequest request)
         {
             var studentData = new StudentData();
             var students = studentData.GetStudents(request);
@@ -31,16 +31,16 @@ namespace sample.Controllers
                 draw = request.Draw,
                 recordsFiltered = students.RecordTotal,
                 recordTotal = students.RecordTotal,
-                data = students.StudentsModelses
+                data = students.Student
             }, JsonRequestBehavior.AllowGet
             );
         }
 
         [HttpGet]
-        public ActionResult Save(int enrollId)
+        public ActionResult Save(int enrollmentId)
         {
             var studentData = new StudentData();
-            return View(studentData.GetStudent(enrollId));
+            return View(studentData.GetStudent(enrollmentId));
         }
 
         [HttpPost]
@@ -57,10 +57,10 @@ namespace sample.Controllers
 
 
         [HttpGet]
-        public ActionResult Delete(int enrollId)
+        public ActionResult Delete(int enrollmentId)
         {
             var studentData = new StudentData();
-            return View(studentData.GetStudent(enrollId));
+            return View(studentData.GetStudent(enrollmentId));
         }
 
         [HttpPost]

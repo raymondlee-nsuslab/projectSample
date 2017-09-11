@@ -9,33 +9,33 @@ namespace WebApiStudents.Controllers
         public ActionResult GetTitles()
         {
             var studentManage = new StudentManage();
-            var titles = studentManage.GetTitleList();
+            var titles = studentManage.GetTitles();
             return Json(titles, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult GetSchools(SchoolListRequest request)
+        public ActionResult GetStudents(StudentDataRequest request)
         {
             var studentManage = new StudentManage();
-            var schools = studentManage.GetSchoolList(request);
+            var students = studentManage.GetStudents(request);
             return Json(new
             {
                 draw = request.Draw,
-                recordsFiltered = schools.TotalRecord,
-                recordTotal = schools.TotalRecord,
-                StudentsModelses = schools.SchoolLists
+                recordsFiltered = students.TotalRecord,
+                recordTotal = students.TotalRecord,
+                Student = students.Students
             }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public ActionResult GetStudent(int enrollId)
+        public ActionResult GetStudent(int enrollmentId)
         {
             var studentManage = new StudentManage();
-            return Json(studentManage.GetStudent(enrollId), JsonRequestBehavior.AllowGet);
+            return Json(studentManage.GetStudent(enrollmentId), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPut]
-        public ActionResult UpdateStudent(Students student)
+        public ActionResult UpdateStudent(Student student)
         {
             var status = false;
             if (ModelState.IsValid)

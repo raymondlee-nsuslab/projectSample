@@ -33,7 +33,7 @@ namespace StudentData
         public virtual StudentModels Student { get; set; }
     }
 
-    public partial class Students
+    public class Student
     {
         public int StudentId { get; set; }
         public int CourseId { get; set; }

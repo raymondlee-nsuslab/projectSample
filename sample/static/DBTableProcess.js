@@ -32,7 +32,7 @@
                 "bSortable": false,
                 "width": "50px",
                 "render": function (data) {
-                    return '<a class="popup" href="/Student/Save?enrollId=' + data + '">Edit</a>';
+                    return '<a class="popup" href="/Student/Save?enrollmentId=' + data + '">Edit</a>';
                 }
             },
             {
@@ -40,7 +40,7 @@
                 "width": "50px",
                 "bSortable": false,
                 "render": function (data) {
-                    return '<a class="popup" href="/Student/Delete?enrollId=' + data + '">Delete</a>';
+                    return '<a class="popup" href="/Student/Delete?enrollmentId=' + data + '">Delete</a>';
                 }
             }
         ],

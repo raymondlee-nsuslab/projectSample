@@ -71,7 +71,6 @@
     <Compile Include="StudentManage.cs" />
     <Compile Include="StudentModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StudentValidation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

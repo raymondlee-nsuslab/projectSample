@@ -4,30 +4,29 @@ using System.Linq;
 using System.Web;
 
 namespace StudentData
-{ 
-    public class DatatableRequest
+{
+    public class StudentRequest
     {
-        public DatatableSearch Search { get; set; }
+        public StudentSearch Search { get; set; }
         public string Name { get; set; }
     }
-
-    public class DatatableSearch
+    public class StudentSearch
     {
         public string Value { get; set; }
     }
 
-    public class DatatableOrder
+    public class StudentOrder
     {
         public int Column { get; set; }
         public string Dir { get; set; }
     }
 
-    public class SchoolListRequest
+    public class StudentDataRequest
     {
         public string Draw { get; set; }
         public int Start { get; set; }
         public int Length { get; set; }
-        public List<DatatableRequest> Columns { get; set; }
-        public List<DatatableOrder> Order { get; set; }
+        public List<StudentRequest> Columns { get; set; }
+        public List<StudentOrder> Order { get; set; }
     }
 }

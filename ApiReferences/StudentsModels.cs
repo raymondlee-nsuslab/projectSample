@@ -19,11 +19,11 @@ namespace ApiReferences
         public decimal? Grade { get; set; }
     }
 
-    public class GetStudentsRequest
+    public class StudentsResponse
     {
         public string Draw { get; set; }
         public int RecordsFiltered { get; set; }
         public int RecordTotal { get; set; }
-        public List<Student> StudentsModelses { get; set; }
+        public List<Student> Student { get; set; }
     }
 }
