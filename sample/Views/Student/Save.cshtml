@@ -1,19 +1,19 @@
-﻿@model StudentData.Student
+﻿@model ApiReferences.Student
     
 <h2>Save</h2>
 @using (Html.BeginForm("Save", "Student", FormMethod.Post, new {id = "popupForm"}))
 {
-    if (Model != null && Model.StudentModelsID > 0)
+    if (Model != null && Model.StudentId > 0)
     {
-        @Html.HiddenFor(s => s.StudentModelsID)
+        @Html.HiddenFor(s => s.StudentId)
     }
-    if (Model != null && Model.CourseModelsID > 0)
+    if (Model != null && Model.CourseId > 0)
     {
-        @Html.HiddenFor(c => c.CourseModelsID)
+        @Html.HiddenFor(c => c.CourseId)
     }
-    if (Model != null && Model.EnrollmentModelsID > 0)
+    if (Model != null && Model.EnrollmentId > 0)
     {
-        @Html.HiddenFor(e => e.EnrollmentModelsID)
+        @Html.HiddenFor(e => e.EnrollmentId)
     }
 
     <div class="form-group">

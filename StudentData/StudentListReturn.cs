@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace StudentData
 {
-    public class StudentListReturn
+    public class StudentsResponse
     {
         public int TotalRecord { get; set; }
-        public List<SchoolList> SchoolLists { get; set; }
+        public List<Student> Students { get; set; }
     }
 }

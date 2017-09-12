@@ -185,7 +185,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
-    <Compile Include="DAL\SchoolInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -307,6 +306,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="DAL\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -316,9 +316,9 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StudentData\StudentData.csproj">
-      <Project>{b983fac9-5470-40b1-9e87-ecb0a54dedaa}</Project>
-      <Name>StudentData</Name>
+    <ProjectReference Include="..\ApiReferences\ApiReferences.csproj">
+      <Project>{11d28aca-7e95-407c-897c-5b4baa65c6bf}</Project>
+      <Name>ApiReferences</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -12,27 +12,26 @@ namespace StudentData
 {
     public class StudentManage
     {
-        public List<string> GetTitleList()
+        public List<string> GetTitles()
         {
             var schoolContext = new SchoolContext();
             var titles = from course in schoolContext.CourseModelses
                          select course.Title;
-
             return titles.ToList();
         }
 
-        public StudentListReturn GetSchoolList(SchoolListRequest request)
+        public StudentsResponse GetStudents(StudentDataRequest studentDataRequest)
         {
             using (SchoolContext schoolContext = new SchoolContext())
             {
-                var start = request.Start;
-                var length = request.Length;
-                var sortColumn = request.Columns[request.Order[0].Column].Name;
-                var sortColumnDir = request.Order[0].Dir;
-                var searchId = request.Columns[1].Search.Value;
-                var searchTitle = request.Columns[6].Search.Value;
+                var start = studentDataRequest.Start;
+                var length = studentDataRequest.Length;
+                var sortColumn = studentDataRequest.Columns[studentDataRequest.Order[0].Column].Name;
+                var sortColumnDir = studentDataRequest.Order[0].Dir;
+                var searchId = studentDataRequest.Columns[1].Search.Value;
+                var searchTitle = studentDataRequest.Columns[6].Search.Value;
 
-                var schoolList = schoolContext.EnrollmentModelses.GroupJoin(schoolContext.CourseModelses,
+                var studentQuery = schoolContext.EnrollmentModelses.GroupJoin(schoolContext.CourseModelses,
                         e => e.CourseModelsID, c => c.CourseModelsID, (e, c) => new { enroll = e, course = c })
                     .SelectMany(course => course.course.DefaultIfEmpty(), (e, c) => new { enroll = e.enroll, coruse = c })
                     .GroupJoin(schoolContext.StudentModels, e => e.enroll.StudentModelsID, s => s.StudentModelsID, (e, s) => new { enroll = e, student = s })
@@ -41,35 +40,35 @@ namespace StudentData
                 if (!string.IsNullOrEmpty(searchId))
                 {
                     var findId = Convert.ToInt32(searchId);
-                    schoolList = schoolList.Where(e => e.student.StudentModelsID == findId);
+                    studentQuery = studentQuery.Where(e => e.student.StudentModelsID == findId);
 
                 }
                 if (!string.IsNullOrEmpty(searchTitle))
                 {
-                    schoolList = schoolList.Where(s => s.enroll.coruse.Title.Contains(searchTitle));
+                    studentQuery = studentQuery.Where(s => s.enroll.coruse.Title.Contains(searchTitle));
                 }
 
                 if (string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDir))
                 {
-                    var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                    var response = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
                         Content = new StringContent(string.Format("SortColumn is Null")),
                         ReasonPhrase = "SortColumn is Null"
                     };
-                    throw new HttpResponseException(resp); 
+                    throw new HttpResponseException(response);
                 }
-                var studentListReturn = new StudentListReturn();
-                studentListReturn.TotalRecord = schoolList.Count();
+                var studentsResponse = new StudentsResponse();
+                studentsResponse.TotalRecord = studentQuery.Count();
 
                 var pageSize = length;
                 var skip = start;
 
-                var infoList = schoolList.Select(
-                    list => new SchoolList()
+                var students = studentQuery.Select(
+                    list => new Student()
                     {
-                        EnrollmentModelsID = list.enroll.enroll.EnrollmentModelsID,
-                        StudentModelsID = list.student.StudentModelsID,
-                        CourseModelsID = list.enroll.coruse.CourseModelsID,
+                        EnrollmentId = list.enroll.enroll.EnrollmentModelsID,
+                        StudentId = list.student.StudentModelsID,
+                        CourseId = list.enroll.coruse.CourseModelsID,
                         Grade = list.enroll.enroll.Grade,
                         Title = list.enroll.coruse.Title,
                         Credits = list.enroll.coruse.Credits,
@@ -77,137 +76,122 @@ namespace StudentData
                         FirstMidName = list.student.FirstMidName,
                         EnrollmentDate = list.student.EnrollmentDate
                     }).OrderBy(sortColumn + " " + sortColumnDir).Skip(skip).Take(pageSize).ToList();
-                studentListReturn.SchoolLists = infoList;
+                studentsResponse.Students = students;
 
-                return studentListReturn;
+                return studentsResponse;
             }
         }
 
-        public Student GetStudent(int enrollId)
+        public Student GetStudent(int enrollmentId)
         {
             using (SchoolContext schoolContext = new SchoolContext())
             {
-                var studentInfo = schoolContext.EnrollmentModelses.Join(schoolContext.StudentModels, e => e.StudentModelsID,
+                var student = schoolContext.EnrollmentModelses.Join(schoolContext.StudentModels, e => e.StudentModelsID,
                         s => s.StudentModelsID, (e, s) => new { enroll = e, student = s }).Join(
                         schoolContext.CourseModelses,
                         e => e.enroll.CourseModelsID,
                         c => c.CourseModelsID, (e, c) => new { enroll = e, course = c })
-                    .Where(e => e.enroll.enroll.EnrollmentModelsID == enrollId).Select(
-                        student => new Student()
+                    .Where(e => e.enroll.enroll.EnrollmentModelsID == enrollmentId).Select(
+                        s => new Student()
                         {
-                            StudentModelsID = student.enroll.enroll.StudentModelsID,
-                            CourseModelsID = student.course.CourseModelsID,
-                            EnrollmentModelsID = student.enroll.enroll.EnrollmentModelsID,
-                            LastName = student.enroll.student.LastName,
-                            FirstMidName = student.enroll.student.FirstMidName,
-                            Title = student.course.Title
+                            StudentId = s.enroll.enroll.StudentModelsID,
+                            CourseId = s.course.CourseModelsID,
+                            EnrollmentId = s.enroll.enroll.EnrollmentModelsID,
+                            LastName = s.enroll.student.LastName,
+                            FirstMidName = s.enroll.student.FirstMidName,
+                            Title = s.course.Title
                         }).FirstOrDefault();
 
-                return studentInfo;
+                return student;
             }
-
         }
 
-        public bool SetStudent(Student requestStudent)
+
+        public bool SetStudent(Student studentUpdate)
         {
-            if (string.IsNullOrEmpty(requestStudent.Title) == true || requestStudent.StudentModelsID<=0)
+            if (string.IsNullOrEmpty(studentUpdate.Title) == true || string.IsNullOrEmpty(studentUpdate.FirstMidName) || string.IsNullOrEmpty(studentUpdate.LastName))
             {
-                return false;
-            }
-            using (SchoolContext schoolContext = new SchoolContext())
-            {
-                var courseId = schoolContext.CourseModelses.FirstOrDefault(c => c.Title.Contains(requestStudent.Title));
-                if (courseId == null)
-                {
-                    return false;
-                }
-
-                var student = schoolContext.StudentModels
-                    .FirstOrDefault(s => s.StudentModelsID == requestStudent.StudentModelsID);
-
-                if (student == null)
-                {
-                    var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent(string.Format("Student ID Not Found")),
-                        ReasonPhrase = "Student ID Not Found"
-                    };
-                    throw new HttpResponseException(resp);
-                }
-
-                student.FirstMidName = requestStudent.FirstMidName;
-                student.LastName = requestStudent.LastName;
-                var enroll =
-                    schoolContext.EnrollmentModelses.FirstOrDefault(
-                        e => e.EnrollmentModelsID == requestStudent.EnrollmentModelsID);
-                if (enroll == null)
-                {
-                    return false;
-                }
-                enroll.CourseModelsID = courseId.CourseModelsID;
-                
-                schoolContext.SaveChanges();
-                return true;
-            }
-
-        }
-
-        public bool AddStudent(Student requestStudent)
-        {
-            if (string.IsNullOrEmpty(requestStudent.Title) == true || string.IsNullOrEmpty(requestStudent.FirstMidName) || string.IsNullOrEmpty(requestStudent.LastName))
-            {
-                var resp = new HttpResponseMessage(HttpStatusCode.NotFound)
+                var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
                     Content = new StringContent(string.Format("Please fill in all fields")),
                     ReasonPhrase = "Please fill in all fields"
                 };
-                throw new HttpResponseException(resp);
+                throw new HttpResponseException(httpResponseMessage);
             }
-
             using (SchoolContext schoolContext = new SchoolContext())
             {
-                var courseId = schoolContext.CourseModelses.FirstOrDefault(c => c.Title.Contains(requestStudent.Title));
+                var courseId = schoolContext.CourseModelses.FirstOrDefault(c => c.Title.Contains(studentUpdate.Title));
                 if (courseId == null)
                 {
                     return false;
                 }
-                //save
-                var maxid = schoolContext.StudentModels.Max(s => s.StudentModelsID);
-                var addId = maxid + 1;
 
-                var studentModels = new StudentModels();
-                studentModels.StudentModelsID = addId;
-                studentModels.FirstMidName = requestStudent.FirstMidName;
-                studentModels.LastName = requestStudent.LastName;
-                studentModels.EnrollmentDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                schoolContext.StudentModels.Add(studentModels);
+                if (!(studentUpdate.StudentId <= 0))
+                {
+                    //edit
+                    var student = schoolContext.StudentModels
+                        .FirstOrDefault(s => s.StudentModelsID == studentUpdate.StudentId);
 
-                var enroll = new EnrollmentModels();
-                enroll.StudentModelsID = addId;
-                enroll.CourseModelsID = courseId.CourseModelsID;
-                schoolContext.EnrollmentModelses.Add(enroll);
+                    if (student == null)
+                    {
+                        var httpResponseMessage = new HttpResponseMessage(HttpStatusCode.NotFound)
+                        {
+                            Content = new StringContent(string.Format("Student ID Not Found")),
+                            ReasonPhrase = "Student ID Not Found"
+                        };
+                        throw new HttpResponseException(httpResponseMessage);
+                    }
+
+                    student.FirstMidName = studentUpdate.FirstMidName;
+                    student.LastName = studentUpdate.LastName;
+                    var enroll =
+                        schoolContext.EnrollmentModelses.FirstOrDefault(
+                            e => e.EnrollmentModelsID == studentUpdate.EnrollmentId);
+                    if (enroll == null)
+                    {
+                        return false;
+                    }
+                    enroll.CourseModelsID = courseId.CourseModelsID;
+                }
+                else
+                {
+                    //save
+                    var maxid = schoolContext.StudentModels.Max(s => s.StudentModelsID);
+                    var addId = maxid + 1;
+
+                    var student = new StudentModels();
+                    student.StudentModelsID = addId;
+                    student.FirstMidName = studentUpdate.FirstMidName;
+                    student.LastName = studentUpdate.LastName;
+                    student.EnrollmentDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    schoolContext.StudentModels.Add(student);
+
+                    var enrollment = new EnrollmentModels();
+                    enrollment.StudentModelsID = addId;
+                    enrollment.CourseModelsID = courseId.CourseModelsID;
+                    schoolContext.EnrollmentModelses.Add(enrollment);
+                }
                 schoolContext.SaveChanges();
                 return true;
             }
-            
         }
 
-        public bool DeleteStudent(Student student)
+        public bool DeleteStudent(int enrollmentId)
         {
             using (SchoolContext schoolContext = new SchoolContext())
             {
                 var enrollment = schoolContext.EnrollmentModelses.FirstOrDefault(
-                    e => e.EnrollmentModelsID == student.EnrollmentModelsID);
+                    e => e.EnrollmentModelsID == enrollmentId);
                 if (enrollment != null)
                 {
-                    var studentModel =
+                    var student =
                         schoolContext.StudentModels.FirstOrDefault(s => s.StudentModelsID == enrollment.StudentModelsID);
                     schoolContext.EnrollmentModelses.Remove(enrollment);
-                    if (studentModel == null)
+                    if (student == null)
                     {
                         return false;
                     }
-                    schoolContext.StudentModels.Remove(studentModel);
+                    schoolContext.StudentModels.Remove(student);
                     schoolContext.SaveChanges();
                     return true;
                 }

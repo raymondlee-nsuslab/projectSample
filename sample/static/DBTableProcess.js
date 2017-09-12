@@ -5,14 +5,14 @@
         "dom": '<"top"i>rt<"botton"lp><"clear">',
         "orderMulti": false,
         "ajax": {
-            "url": "/Student/LoadSchoolList",
+            "url": "/Student/GetStudents",
             "type": "POST",
             "datatype": "json"
         },
         "columns": [
-            { "data": "EnrollmentModelsID", "name": "EnrollmentModelsID", "autoWidth": true },
-            { "data": "StudentModelsID", "name": "StudentModelsID", "autoWidth": true },
-            { "data": "CourseModelsID", "name": "CourseModelsID", "autoWidth": true },
+            { "data": "EnrollmentId", "name": "EnrollmentId", "autoWidth": true },
+            { "data": "StudentId", "name": "StudentId", "autoWidth": true },
+            { "data": "CourseId", "name": "CourseId", "autoWidth": true },
             { "data": "LastName", "name": "LastName", "autoWidth": true },
             { "data": "FirstMidName", "name": "FirstMidName", "autoWidth": true },
             {
@@ -28,19 +28,19 @@
             { "data": "Credits", "name": "Credits", "autoWidth": true },
             { "data": "Grade", "name": "Grade", "autoWidth": true },
             {
-                "data": "EnrollmentModelsID",
+                "data": "EnrollmentId",
                 "bSortable": false,
                 "width": "50px",
                 "render": function (data) {
-                    return '<a class="popup" href="/Student/Save?enrollId=' + data + '">Edit</a>';
+                    return '<a class="popup" href="/Student/Save?enrollmentId=' + data + '">Edit</a>';
                 }
             },
             {
-                "data": "EnrollmentModelsID",
+                "data": "EnrollmentId",
                 "width": "50px",
                 "bSortable": false,
                 "render": function (data) {
-                    return '<a class="popup" href="/Student/Delete?enrollId=' + data + '">Delete</a>';
+                    return '<a class="popup" href="/Student/Delete?enrollmentId=' + data + '">Delete</a>';
                 }
             }
         ],
@@ -105,8 +105,8 @@
                             schoolTable.ajax.reload();
                         }
                     },
-                    error : function(jqxhr) {
-                        $('#error').innerHTML(jqxhr.responseText);
+                    error: function (jqxhr) {
+                        $('#error').html(jqxhr.responseText);
                     }
                 });
 

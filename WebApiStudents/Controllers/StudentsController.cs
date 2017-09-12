@@ -9,38 +9,29 @@ namespace WebApiStudents.Controllers
         public ActionResult GetTitles()
         {
             var studentManage = new StudentManage();
-            var titles = studentManage.GetTitleList();
+            var titles = studentManage.GetTitles();
             return Json(titles, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public ActionResult GetSchools(SchoolListRequest request)
+        [HttpPost]
+        public ActionResult GetStudents(StudentDataRequest request)
         {
             var studentManage = new StudentManage();
-            var schools = studentManage.GetSchoolList(request);
+            var students = studentManage.GetStudents(request);
             return Json(new
             {
                 draw = request.Draw,
-                recordsFiltered = schools.TotalRecord,
-                recordTotal = schools.TotalRecord,
-                data = schools.SchoolLists
+                recordsFiltered = students.TotalRecord,
+                recordTotal = students.TotalRecord,
+                Student = students.Students
             }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public ActionResult GetStudent(int enrollId)
+        public ActionResult GetStudent(int enrollmentId)
         {
             var studentManage = new StudentManage();
-
-            return Json(studentManage.GetStudent(enrollId), JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public ActionResult AddStudent(Student student)
-        {
-            var studentManage = new StudentManage();
-
-            return Json(studentManage.AddStudent(student), JsonRequestBehavior.AllowGet);
+            return Json(studentManage.GetStudent(enrollmentId), JsonRequestBehavior.AllowGet);
         }
 
         [HttpPut]
@@ -56,12 +47,12 @@ namespace WebApiStudents.Controllers
         }
 
         [HttpDelete]
-        public ActionResult DeleteStudent(Student student)
+        public ActionResult DeleteStudent(int enrollmentId)
         {
             var status = false;
             var studentManage = new StudentManage();
-            status = studentManage.DeleteStudent(student);
-            return Json(status);
+            status = studentManage.DeleteStudent(enrollmentId);
+            return Json(status, JsonRequestBehavior.AllowGet);
         }
     }
 
